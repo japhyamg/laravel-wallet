@@ -12,17 +12,17 @@ interface WalletFloat
     /**
      * @param float|string $amount
      */
-    public function depositFloat($amount, ?array $meta = null, bool $confirmed = true): Transaction;
+    public function depositFloat($amount, ?array $meta = null, string $confirmed = Transaction::TRANSACTION_PENDING): Transaction;
 
     /**
      * @param float|string $amount
      */
-    public function withdrawFloat($amount, ?array $meta = null, bool $confirmed = true): Transaction;
+    public function withdrawFloat($amount, ?array $meta = null, string $confirmed = Transaction::TRANSACTION_PENDING): Transaction;
 
     /**
      * @param float|string $amount
      */
-    public function forceWithdrawFloat($amount, ?array $meta = null, bool $confirmed = true): Transaction;
+    public function forceWithdrawFloat($amount, ?array $meta = null, string $confirmed = Transaction::TRANSACTION_PENDING): Transaction;
 
     /**
      * @param float|string $amount

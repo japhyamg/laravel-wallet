@@ -40,7 +40,7 @@ trait HasWallet
      * @throws AmountInvalid
      * @throws Throwable
      */
-    public function deposit($amount, ?array $meta = null, bool $confirmed = true): Transaction
+    public function deposit($amount, ?array $meta = null, string $confirmed = Transaction::TRANSACTION_PENDING): Transaction
     {
         /** @var Wallet $self */
         $self = $this;
@@ -143,7 +143,7 @@ trait HasWallet
      * @throws InsufficientFunds
      * @throws Throwable
      */
-    public function withdraw($amount, ?array $meta = null, bool $confirmed = true): Transaction
+    public function withdraw($amount, ?array $meta = null, string $confirmed = Transaction::TRANSACTION_PENDING): Transaction
     {
         /** @var Wallet $this */
         app(ConsistencyInterface::class)->checkPotential($this, $amount);
@@ -178,7 +178,7 @@ trait HasWallet
      * @throws AmountInvalid
      * @throws Throwable
      */
-    public function forceWithdraw($amount, ?array $meta = null, bool $confirmed = true): Transaction
+    public function forceWithdraw($amount, ?array $meta = null, string $confirmed = Transaction::TRANSACTION_PENDING): Transaction
     {
         /** @var Wallet $self */
         $self = $this;

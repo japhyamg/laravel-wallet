@@ -17,7 +17,7 @@ class CreateTransactionsTable extends Migration
             $table->unsignedBigInteger('wallet_id');
             $table->enum('type', ['deposit', 'withdraw'])->index();
             $table->decimal('amount', 64, 0);
-            $table->boolean('confirmed');
+            $table->string('confirmed');
             $table->json('meta')->nullable();
             $table->uuid('uuid')->unique();
             $table->timestamps();
