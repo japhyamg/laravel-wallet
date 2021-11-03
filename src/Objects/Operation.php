@@ -73,7 +73,7 @@ class Operation
         return $this->meta;
     }
 
-    public function isConfirmed(): bool
+    public function isConfirmed(): string
     {
         return $this->confirmed;
     }
@@ -113,7 +113,7 @@ class Operation
     /**
      * @return static
      */
-    public function setConfirmed(bool $confirmed): self
+    public function setConfirmed(string $confirmed): self
     {
         $this->confirmed = $confirmed;
 

@@ -17,7 +17,7 @@ use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Services\LockService;
 use Bavix\Wallet\Services\WalletService;
 
-trait CanConfirm
+trait CanDecline
 {
     /**
      * @throws BalanceIsEmpty
@@ -25,7 +25,7 @@ trait CanConfirm
      * @throws ConfirmedInvalid
      * @throws WalletOwnerInvalid
      */
-    public function confirm(Transaction $transaction): bool
+    public function decline(Transaction $transaction): bool
     {
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($transaction) {
             /** @var Confirmable|Wallet $self */
@@ -44,15 +44,15 @@ trait CanConfirm
                     );
                 }
 
-                return $self->forceConfirm($transaction);
+                return $self->forceDecline($transaction);
             });
         });
     }
 
-    public function safeConfirm(Transaction $transaction): bool
+    public function safeDecline(Transaction $transaction): bool
     {
         try {
-            return $this->confirm($transaction);
+            return $this->decline($transaction);
         } catch (\Throwable $throwable) {
             return false;
         }
@@ -63,7 +63,7 @@ trait CanConfirm
      *
      * @throws UnconfirmedInvalid
      */
-    public function resetConfirm(Transaction $transaction): bool
+    public function resetDecline(Transaction $transaction): bool
     {
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($transaction) {
             /** @var Wallet $self */
@@ -82,7 +82,7 @@ trait CanConfirm
                 $mathService = app(MathInterface::class);
                 $negativeAmount = $mathService->negative($transaction->amount);
 
-                return $transaction->update(['confirmed' => Transaction::TRANSACTION_CONFIRMED]) &&
+                return $transaction->update(['confirmed' => Transaction::TRANSACTION_DECLINED]) &&
                     // update balance
                     app(CommonService::class)
                         ->addBalance($wallet, $negativeAmount)
@@ -91,10 +91,10 @@ trait CanConfirm
         });
     }
 
-    public function safeResetConfirm(Transaction $transaction): bool
+    public function safeResetDecline(Transaction $transaction): bool
     {
         try {
-            return $this->resetConfirm($transaction);
+            return $this->resetDecline($transaction);
         } catch (\Throwable $throwable) {
             return false;
         }
@@ -104,7 +104,7 @@ trait CanConfirm
      * @throws ConfirmedInvalid
      * @throws WalletOwnerInvalid
      */
-    public function forceConfirm(Transaction $transaction): bool
+    public function forceDecline(Transaction $transaction): bool
     {
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($transaction) {
             /** @var Wallet $self */
@@ -123,7 +123,7 @@ trait CanConfirm
                     throw new WalletOwnerInvalid(trans('wallet::errors.owner_invalid'));
                 }
 
-                return $transaction->update(['confirmed' => Transaction::TRANSACTION_CONFIRMED]) &&
+                return $transaction->update(['confirmed' => Transaction::TRANSACTION_DECLINED]) &&
                     // update balance
                     app(CommonService::class)
                         ->addBalance($wallet, $transaction->amount)

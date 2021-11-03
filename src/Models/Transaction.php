@@ -34,6 +34,10 @@ class Transaction extends Model
     public const TYPE_DEPOSIT = 'deposit';
     public const TYPE_WITHDRAW = 'withdraw';
 
+    public const TRANSACTION_PENDING = 'pending';
+    public const TRANSACTION_CONFIRMED = 'confirmed';
+    public const TRANSACTION_DECLINED = 'declined';
+
     /**
      * @var array
      */
@@ -53,7 +57,7 @@ class Transaction extends Model
      */
     protected $casts = [
         'wallet_id' => 'int',
-        'confirmed' => 'bool',
+        'confirmed' => 'string',
         'meta' => 'json',
     ];
 

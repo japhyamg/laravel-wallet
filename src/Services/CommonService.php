@@ -125,7 +125,7 @@ class CommonService
      *
      * @throws AmountInvalid
      */
-    public function deposit(Wallet $wallet, $amount, ?array $meta, bool $confirmed = true): Transaction
+    public function deposit(Wallet $wallet, $amount, ?array $meta, string $confirmed = Transaction::TRANSACTION_PENDING): Transaction
     {
         return $this->lockService->lock($this, __FUNCTION__, function () use ($wallet, $amount, $meta, $confirmed) {
             $this->consistency->checkPositive($amount);

@@ -9,10 +9,13 @@ use function array_key_exists;
 use function array_merge;
 use Bavix\Wallet\Interfaces\Confirmable;
 use Bavix\Wallet\Interfaces\Customer;
+use Bavix\Wallet\Interfaces\Declinable;
 use Bavix\Wallet\Interfaces\Exchangeable;
 use Bavix\Wallet\Interfaces\WalletFloat;
 use Bavix\Wallet\Services\WalletService;
+use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Traits\CanConfirm;
+use Bavix\Wallet\Traits\CanDecline;
 use Bavix\Wallet\Traits\CanExchange;
 use Bavix\Wallet\Traits\CanPayFloat;
 use Bavix\Wallet\Traits\HasGift;
@@ -34,8 +37,9 @@ use Illuminate\Support\Str;
  * @property \Bavix\Wallet\Interfaces\Wallet $holder
  * @property string                          $currency
  */
-class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchangeable
+class Wallet extends Model implements Customer, WalletFloat, Confirmable, Declinable, Exchangeable
 {
+    use CanDecline;
     use CanConfirm;
     use CanExchange;
     use CanPayFloat;
@@ -144,7 +148,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     {
         return $this->transactions()
             ->where('wallet_id', $this->getKey())
-            ->where('confirmed', true)
+            ->where('confirmed', Transaction::TRANSACTION_CONFIRMED)
             ->sum('amount')
         ;
     }
