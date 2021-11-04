@@ -75,7 +75,8 @@ trait CanDecline
                     return false;
                 }
 
-                if (!$transaction->confirmed) {
+                // if (!$transaction->confirmed) {
+                if ($transaction->confirmed == Transaction::TRANSACTION_DECLINED) {
                     throw new UnconfirmedInvalid(trans('wallet::errors.unconfirmed_invalid'));
                 }
 
@@ -115,7 +116,7 @@ trait CanDecline
                     ->getWallet($self)
                 ;
 
-                if ($transaction->confirmed) {
+                if ($transaction->confirmed == Transaction::TRANSACTION_DECLINED) {
                     throw new ConfirmedInvalid(trans('wallet::errors.confirmed_invalid'));
                 }
 
