@@ -148,7 +148,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Declin
     {
         return $this->transactions()
             ->where('wallet_id', $this->getKey())
-            ->where('confirmed', Transaction::TRANSACTION_CONFIRMED)
+            ->where('confirmed', true)
             ->sum('amount')
         ;
     }
